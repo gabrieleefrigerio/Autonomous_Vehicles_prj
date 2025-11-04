@@ -7,6 +7,7 @@ bag = ros2bagreader(bagFolder);
 
 % Select a TOPIC (/scan)
 sel = select(bag, "Topic", "/odom");
+sel_scan = select(bag, "Topic", "/scan");
 %%
 
 % (additional) Limitin time:
@@ -17,7 +18,7 @@ sel_time = select(sel, "Time", [t0 t1]);
 % read messages as struct
 odomMsgs = readMessages(sel);
 timeMsgs= readMessages(sel_time);
-    
+
 
 %%
 
@@ -174,6 +175,7 @@ for i = 1:N
     % L'angolo di Yaw è il primo elemento se si usa la sequenza 'ZYX' (Z è Yaw, Y è Pitch, X è Roll)
     theta(i) = eul(1); 
     
+    
     % --- Calcolo Velocità ---
     v = odomMsg.twist.twist.linear;
     Vx(i) = v.x;
@@ -228,3 +230,89 @@ while toc(t0) < time_control(end)
     elapsed = toc(last); pause(max(0, period - elapsed)); last = tic;
 end
 
+%% map reconstruction 
+
+scanMsgs = readMessages(sel_scan);
+N = length(scanMsgs);
+%R = rotz(theta);
+
+sel_time_scan = select(sel_scan, "Time", [t0 t1]);
+timeMsgs_scan = readMessages(sel_time_scan);
+ 
+
+
+for i = 1:N % per leggere il tempo
+    timeMsg_scan = timeMsgs_scan{i};
+    % Modificato: Forza la conversione a double
+time_scan(i) = double(timeMsg_scan.header.stamp.sec) + double(timeMsg_scan.header.stamp.nanosec) * 1e-9;
+end
+
+
+theta_scan = interp1(time,theta,time_scan);
+pos_scan_x = interp1(time,X,time_scan);
+pos_scan_y = interp1(time,Y,time_scan);
+ %%
+figure()
+for i = 1:N
+    ls = scanMsgs{i}; % i-th message
+    sc= rosReadLidarScan(ls); %reading messages
+    Cartesian = [sc.Cartesian , zeros(360,1)]*rotz(theta_scan(i));
+    x_map = Cartesian(:,1) + pos_scan_x(i);
+    x_valid(:,i)= x_map(isfinite(x_map));
+    y_map= Cartesian(:,2) + pos_scan_y(i);
+    y_valid(:,i) = y_map(isfinite(y_map));
+   plot(x_valid(i),y_valid(i))
+   hold on
+   grid on
+end
+%%
+% BEFORE the loop, initialize as cell arrays instead of matrices
+x_valid = cell(1, N);
+y_valid = cell(1, N);
+
+figure()
+for i = 1:N
+    ls = scanMsgs{i}; % i-th message
+    sc= rosReadLidarScan(ls); %reading messages
+    Cartesian = rotz(rad2deg(theta_scan(i)))*[sc.Cartesian , zeros(360,1)]';
+    x_map = Cartesian(:,1) + pos_scan_x(i);
+    y_map= Cartesian(:,2) + pos_scan_y(i); % Moved y_map calculation up
+
+    % Store the resulting vectors into the i-th cell
+    x_valid{i} = x_map(isfinite(x_map)); 
+    y_valid{i} = y_map(isfinite(y_map));
+    
+    % Plotting needs to change to access the cell content with {}
+    plot(x_valid{i}, y_valid{i}, '.') 
+    hold on
+    grid on
+end
+%%
+figure()
+for i = 1:786
+    ls = scanMsgs{i}; % i-th message
+    sc= rosReadLidarScan(ls); %reading messages
+  Cartesian = (rotz(rad2deg(theta_scan(i)))*[sc.Cartesian , zeros(360,1)]')';
+    x_map = Cartesian(:,1) + pos_scan_x(i);
+    y_map= Cartesian(:,2) + pos_scan_y(i);
+    
+    % Get the indices of the finite points once
+    finite_idx = isfinite(x_map) & isfinite(y_map);
+    
+    % Plot only the finite points directly
+    plot(x_map(finite_idx), y_map(finite_idx), '.')
+    axis equal
+    hold on
+    grid on
+end
+% 1. Plotta le svolte a SINISTRA (es. in blu)
+% Sottrae 1 da Y perché in MATLAB gli indici partono da 1 e `turn_left_indices`
+% contiene gli indici del vettore `Y`.
+plot(X(turn_left_indices), Y(turn_left_indices), 'b.', 'MarkerSize', 8, 'DisplayName', 'Svolta a Sinistra');
+
+% 2. Plotta i tratti DRITTI (es. in verde)
+plot(X(straight_indices), Y(straight_indices), 'g.', 'MarkerSize', 8, 'DisplayName', 'Dritto');
+
+% 3. Plotta le svolte a DESTRA (es. in rosso)
+plot(X(turn_right_indices), Y(turn_right_indices), 'r.', 'MarkerSize', 8, 'DisplayName', 'Svolta a Destra');
+hold on
