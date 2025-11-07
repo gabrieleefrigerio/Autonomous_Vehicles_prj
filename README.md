@@ -4,6 +4,7 @@ TO DO LIST
 Frequenza \odom 50 Hz - Frequenza \cmd_vel 10 Hz. <br>
 Controllare la frequenza con qui simulink e gazebo comunicano, fissarla a 10 Hz. <br>
 Controllare la questione dei vari interp1 (magari tenedo frequenza 50/100 e mandando il segnale a gazebo ogni 0.1 secondi). <br>
-Migliorare mappa degli ostacoli tenendo in considerazione l'incertezza nel sensore Lidar (\scan) e nel sensore di posizione (\odom).
+Migliorare mappa degli ostacoli tenendo in considerazione l'incertezza nel sensore Lidar (\scan) e nel sensore di posizione (\odom). <br>
+Mappare mappa anche con nostra traiettoria (al momento è stato fatto solo con quella del professore).
 
 
