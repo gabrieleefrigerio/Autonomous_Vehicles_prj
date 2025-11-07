@@ -1,0 +1,25 @@
+turtlesim = 		x    y   theta
+		init	5.54;5.54;0 # this is initial robot position and orientation (theta counterclockwise)
+		1	10;5.54;pi/2
+		2	10;10;5/4pi
+		3	1;1;pi/2
+		4	1;10;0
+		5	5.54;5.54;0
+		6	8;8;3/4pi
+		7	2;5,54;3/2pi
+		8	5.54;2;pi/4
+		9	8;5,54;pi/2
+		10	5.54;5.54;3/2pi
+
+turtlebot3 = 	x    y   theta
+		init	0;0;0 # this is initial robot position and orientation (theta counterclockwise, quaternions!)
+		1	5;0;pi/2
+		2	5;5;5/4pi
+		3	-5;-5;pi/2
+		4	-5;5;0
+		5	0;0;0
+		6	3;3;3/4pi
+		7	-3;0;3/2pi
+		8	0;-3;pi/4
+		9	3;0;pi/2
+		10	0;0;3/2pi
