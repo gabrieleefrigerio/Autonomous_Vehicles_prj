@@ -39,6 +39,13 @@ Quaternion_Matrix = [quatW, quatX, quatY, quatZ];
 
 Quaternion_Matrix = [waypoints(:, 1:2) Quaternion_Matrix];
 
+
+
+
+
+%% control
+Kv = 0.02;
+Kw = 0.002;
 %% --- trajectory
 
 N_points = size(Quaternion_Matrix,1) ;
