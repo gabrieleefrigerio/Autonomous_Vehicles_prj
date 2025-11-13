@@ -18,7 +18,7 @@ sel_time = select(sel, "Time", [t0 t1]);
 % read messages as struct
 odomMsgs = readMessages(sel);
 timeMsgs= readMessages(sel_time);
-
+ 
 
 %%
 
