@@ -13,7 +13,7 @@ sel_scan = select(bag, "Topic", "/scan");
 % (additional) Limitin time:
  t0 = sel.StartTime ; t1 = sel.EndTime ; 
 
-sel_time = select(sel, "Time", [t0 t1]);
+sel_time = select(sel, "Time", [t0 t1]); 
 
 % read messages as struct
 odomMsgs = readMessages(sel);
