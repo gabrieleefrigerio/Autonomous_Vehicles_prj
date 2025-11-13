@@ -11,7 +11,7 @@ sel_scan = select(bag, "Topic", "/scan");
 %%
 
 % (additional) Limitin time:
- t0 = sel.StartTime ; t1 = sel.EndTime ;
+ t0 = sel.StartTime ; t1 = sel.EndTime ; 
 
 sel_time = select(sel, "Time", [t0 t1]);
 
