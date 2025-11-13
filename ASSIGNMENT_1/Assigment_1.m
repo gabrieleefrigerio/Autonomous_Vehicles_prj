@@ -6,7 +6,7 @@ bagFolder ="/home/diego/Desktop/Assigments/Assignment_1/tb3_nocmd"; % folder wit
 bag = ros2bagreader(bagFolder);
 
 % Select a TOPIC (/scan)
-sel = select(bag, "Topic", "/odom");
+sel = select(bag, "Topic", "/odom"); 
 sel_scan = select(bag, "Topic", "/scan");
 %%
 
