@@ -49,7 +49,7 @@ Quaternion_Matrix = [waypoints(:, 1:2) Quaternion_Matrix];
 
 
 %% control
-Kv = 0.45;
+Kv = 0.40;
 Kw = 0.7;
 % index = 1;
 %angular_error = 1;
