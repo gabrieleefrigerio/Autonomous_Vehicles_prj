@@ -33,9 +33,14 @@ quatZ = sin(Theta / 2);
 quatX = zeros(size(Theta));
 quatY = zeros(size(Theta));
 
+Angl = zeros(3,10)';
+Angl(:,3) = waypoints(:,3);
+
+Quat = eul2quat(Angl,"XYZ");
+
 % 3. Creazione della matrice finale nx4
-% Ordine standard ROS: [W, X, Y, Z]
-Quaternion_Matrix = [quatW, quatX, quatY, quatZ];
+%Ordine per ROS 2: [X, Y, Z, W]
+Quaternion_Matrix = [quatX, quatY, quatZ, quatW];
 
 Quaternion_Matrix = [waypoints(:, 1:2) Quaternion_Matrix];
 
@@ -44,9 +49,10 @@ Quaternion_Matrix = [waypoints(:, 1:2) Quaternion_Matrix];
 
 
 %% control
-Kv = 0.35;
-Kw = 2;
-index = 1;
+Kv = 0.45;
+Kw = 0.7;
+% index = 1;
+%angular_error = 1;
 %% --- trajectory
 
 N_points = size(Quaternion_Matrix,1) ;
