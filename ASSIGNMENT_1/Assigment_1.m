@@ -6,19 +6,19 @@ bagFolder ="/home/diego/Desktop/Assigments/Assignment_1/tb3_nocmd"; % folder wit
 bag = ros2bagreader(bagFolder);
 
 % Select a TOPIC (/scan)
-sel = select(bag, "Topic", "/odom");
+sel = select(bag, "Topic", "/odom"); 
 sel_scan = select(bag, "Topic", "/scan");
 %%
 
 % (additional) Limitin time:
- t0 = sel.StartTime ; t1 = sel.EndTime ;
+ t0 = sel.StartTime ; t1 = sel.EndTime ; 
 
-sel_time = select(sel, "Time", [t0 t1]);
+sel_time = select(sel, "Time", [t0 t1]); 
 
 % read messages as struct
 odomMsgs = readMessages(sel);
 timeMsgs= readMessages(sel_time);
-
+ 
 
 %%
 
