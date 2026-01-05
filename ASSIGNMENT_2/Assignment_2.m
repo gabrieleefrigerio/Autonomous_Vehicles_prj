@@ -71,7 +71,7 @@ end
 
 
 %%
-bagFolder ="/home/diego/Desktop/Assignments/GitHub/ASSIGNMENT_2/tb3_subset"; % folder with metadata.yaml + *.mcap
+bagFolder ="/home/nicola-bertocchi/Desktop/Autonomous_Vehicles/Assignments/ASSIGNMENT_2/tb3_subset"; % folder with metadata.yaml + *.mcap
 bag = ros2bagreader(bagFolder);
 
 % Select a TOPIC (/scan)
