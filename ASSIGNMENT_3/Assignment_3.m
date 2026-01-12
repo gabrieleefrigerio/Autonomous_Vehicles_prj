@@ -1,14 +1,15 @@
-% Inizializzazione della matrice dati
+worldName = 'default';
 
 % Data structure: {Nome_Colore_File, X, Y}
 sphere_data = {
-    'red',              0, 3;
-    'big_purple',     6,  0;
-    'big_red',         -6,  0;
+    'red',            0,  1;
+    'big_purple',     3,  0;
+    'big_red',       -3,  0;
    };
 % --- Parametri fissi ---
-worldName = 'default'; % Sostituisci se necessario
-z = 0.4;               % La coordinata Z è costante
+ % Sostituisci se necessario
+z = 0.4; 
+tutto_ok = true;
 
 % --- Ciclo di importazione ---
 N_spheres = size(sphere_data, 1); 
@@ -25,6 +26,13 @@ for i = 1:N_spheres
     % Esempio: 'bright_green_sphere.sdf'
     modelFileName = [color_name, '_sphere.sdf'];
     modelPath = fullfile(pwd, modelFileName);
+
+    if exist(modelPath, 'file') ~= 2
+        fprintf(2, 'ERRORE: Il file "%s" NON ESISTE in:\n%s\n', modelFileName, pwd);
+        disp('--> Salto allo spawn successivo...');
+        tutto_ok = false;
+        continue; % Salta questa sfera e passa alla prossima
+    end
     
     % 3. Nome univoco della sfera nel simulatore
     % Esempio: 'ball_bright_green_1'
@@ -42,19 +50,51 @@ for i = 1:N_spheres
     if status ~= 0
         disp("  -> Spawn FALLITO:");
         disp(out);
-        % Potrebbe essere utile aggiungere un 'break' o 'continue' qui in caso di errore
     else
         disp("  -> Spawn riuscito.");
     end
 end
 
-disp('--- Importazione completata ---');
-
-
+if tutto_ok
+    disp('--- Importazione completata ---');
+else
+    fprintf(2, 'ATTENZIONE: Ci sono stati degli errori. Importazione NON completata del tutto.');
+end
 
 %%
-
 Kv = 0.8;
 Kw = 0.3;
 toll = 0.001;
-theta_ref = 1.8*pi;
+theta_ref = 1.05*pi;
+
+%% Colors Limit Definition
+hexCode_1 = '#c83030';
+hexCode_2 = '#c80067';
+
+rgb_1 = validatecolor(hexCode_1);
+rgb_2 = validatecolor(hexCode_2);
+
+hsv_1 = rgb2hsv(rgb_1);
+hsv_2 = rgb2hsv(rgb_2);
+
+limit_sup = zeros(1,length(hsv_1));
+for i=1:length(hsv_1)
+    if i == 2
+        limit_sup(i) = 1;
+    else
+        limit_sup(i) = hsv_1(i) + 0.1;
+    end
+end
+
+limit_inf = zeros(1,length(hsv_1));
+for i=1:length(hsv_1)
+    if i == 2
+        limit_inf(i) = 0.35;
+    elseif hsv_1(i)<0.1
+        limit_inf(i) = 1 + (hsv_1(i) - 0.1);
+    else
+        limit_inf(i) = hsv_1(i) - 0.2; 
+    end
+end
+
+

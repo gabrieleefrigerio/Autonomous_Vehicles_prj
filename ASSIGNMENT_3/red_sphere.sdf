@@ -23,8 +23,8 @@
         </geometry>
         <material>
           <!-- rgba 1 0 0 1 = rosso opaco -->
-          <ambient>1 0 0 1</ambient>
-          <diffuse>1 0 0 1</diffuse>
+          <ambient>0.784 0.188 0.188 1</ambient>
+          <diffuse>0.784 0.188 0.188 1</diffuse>
         </material>
       </visual>
     </link>
