@@ -64,8 +64,8 @@ end
 %%
 Kv = 0.8;
 Kw = 0.3;
-toll = 0.001;
-theta_ref = 0.6*pi;
+toll = 0.00001;
+theta_ref = 1.99*pi;
 
 %% Colors Limit Definition
 hexCode_1 = '#c83030';
